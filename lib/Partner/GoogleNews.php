@@ -1,5 +1,7 @@
 <?php
-
+/*
+ * Plugin Name: Amazing Feed
+ */
 namespace Wezo\Plugin\Feed\Partner;
 
 use Wezo\Plugin\Feed\Core\Blog;
@@ -39,8 +41,11 @@ class GoogleNews
      *
      * @param \WP_REST_Request $request The REST request object.
      */
-    public function callbackArticles(\WP_REST_Request $request)
+    public function callbackArticles($request)
     {
+
+        $output = $request->get_param('output') ? intval($request->get_param('output')) : 'esc_html';
+
         // Determine the limit based on the request or default size
         $limit = $request->get_param('num') ? intval($request->get_param('num')) : $this->sizeArticles;
         $limit = min($limit, $this->maxArticles);
@@ -49,7 +54,7 @@ class GoogleNews
         if ($request->get_param('type') && is_array($request->get_param('type'))) {
             $this->typeArticles = $request->get_param('type');
         }
-        if ($request->get_param('type') && !is_array($request->get_param('type'))) {
+        if ($request->get_param('type') && ! is_array($request->get_param('type'))) {
             $this->typeArticles = [$request->get_param('type')];
         }
 
@@ -58,7 +63,7 @@ class GoogleNews
         if ($request->get_param('category') && is_array($request->get_param('category'))) {
             $categoriesSlug = $request->get_param('category');
         }
-        if ($request->get_param('category') && !is_array($request->get_param('category'))) {
+        if ($request->get_param('category') && ! is_array($request->get_param('category'))) {
             $categoriesSlug = [$request->get_param('category')];
         }
 
@@ -68,9 +73,11 @@ class GoogleNews
         // Generate the RSS feed
         $xml = $this->getRss($site, $limit, $categoriesSlug);
 
-        // Output the XML feed
+        $response = new \WP_REST_Response();
+        $response->set_data($xml);
+        $response->set_status(200);
         header('Content-Type: application/xml; charset=' . $site->charset);
-        echo ($xml);
+        echo $output == 'esc_html' ? wp_kses($response->get_data(), true) : $response->get_data();
         exit;
     }
 

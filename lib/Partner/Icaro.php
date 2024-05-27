@@ -1,5 +1,7 @@
 <?php
-
+/*
+ * Plugin Name: Amazing Feed
+ */
 namespace Wezo\Plugin\Feed\Partner;
 
 use Wezo\Plugin\Feed\Core\Blog;
@@ -30,8 +32,11 @@ class Icaro
      *
      * @param \WP_REST_Request $request Objeto de requisição do WordPress REST API.
      */
-    public function callbackArticles(\WP_REST_Request $request)
+    public function callbackArticles($request)
     {
+
+        $output = $request->get_param('output') ? intval($request->get_param('output')) : 'esc_html';
+
         // Determina o limite baseado na requisição ou usa o tamanho padrão
         $limit = $request->get_param('num') ? intval($request->get_param('num')) : $this->sizeArticles;
         $limit = min($limit, $this->maxArticles);
@@ -58,8 +63,12 @@ class Icaro
 
         // Gera o RSS
         $xml = $this->getRss($site, $limit, $categoriesSlug);
-        header('Content-Type: application/xml; charset=' . get_option('blog_charset'));
-        echo ($xml);
+
+        $response = new \WP_REST_Response();
+        $response->set_data($xml);
+        $response->set_status(200);
+        header('Content-Type: application/xml; charset=' . $site->charset);
+        echo $output == 'esc_html' ? wp_kses($response->get_data(), true) : $response->get_data();
         exit;
     }
 

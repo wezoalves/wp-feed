@@ -1,5 +1,7 @@
 <?php
-
+/*
+ * Plugin Name: Amazing Feed
+ */
 namespace Wezo\Plugin\Feed\Utils;
 
 class Text

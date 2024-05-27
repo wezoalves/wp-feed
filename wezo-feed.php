@@ -1,8 +1,11 @@
 <?php
 /*
+ * Plugin Name: Amazing Feed
+ */
+/*
 Plugin Name: Amazing Feed
 Description: Seamlessly integrate your WordPress content with multiple platforms, including Google News, ICARO (Tim News), and Portal R7. This plugin creates REST API endpoints to list the latest articles in formats compatible with each platform's specifications, ensuring efficient and quick integration.
-Version: 1.0
+Version: 1.0.2
 Author: Weslley Alves
 Author URI: https://www.wezo.com.br
 License: GPL-3.0-or-later
@@ -26,13 +29,13 @@ function register_endpoints()
     register_rest_route('icaro/v1/feed', '/articles', [
         'methods' => \WP_REST_Server::READABLE,
         'callback' => [new Wezo\Plugin\Feed\Partner\Icaro(), 'callbackArticles'],
-        'permission_callback' => '__return_true',
+        //'permission_callback' => '__return_true',
     ]);
 
     register_rest_route('googlenews/v1/feed', '/articles', [
         'methods' => \WP_REST_Server::READABLE,
         'callback' => [new \Wezo\Plugin\Feed\Partner\GoogleNews(), 'callbackArticles'],
-        'permission_callback' => '__return_true',
+        //'permission_callback' => '__return_true',
     ]);
 
 }
