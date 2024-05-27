@@ -24,6 +24,12 @@ require_once plugin_dir_path(__FILE__) . 'lib/Utils/Text.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Partner/Icaro.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Partner/GoogleNews.php';
 
+function change_rest_url_prefix()
+{
+    return 'apifeed';
+}
+add_filter('rest_url_prefix', 'change_rest_url_prefix');
+
 function register_endpoints()
 {
     register_rest_route('icaro/v1/feed', '/articles', [
@@ -38,6 +44,7 @@ function register_endpoints()
         //'permission_callback' => '__return_true',
     ]);
 
+    flush_rewrite_rules(true);
 }
 
 add_action('rest_api_init', 'register_endpoints');
