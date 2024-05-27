@@ -11,7 +11,10 @@
 Feed is a comprehensive solution for integrating **WordPress** content with multiple platforms, including **Google News**, **ICARO (Tim News)**, and Portal R7 **_(in development)_**. This plugin creates REST API endpoints to list the latest articles from your site, formatted according to each platform's specifications, ensuring smooth and efficient integration.
 
 
-![Plugin WordPress Amazing Feed](https://github.com/wezoalves/wp-feed/blob/main/assets/cover.png?raw=true)
+![[image-overview]: https://github.com/wezoalves/wp-feed
+](https://github.com/wezoalves/wp-feed/blob/main/assets/cover.png?raw=true)
+
+[image-overview]: https://github.com/wezoalves/wp-feed/blob/main/assets/cover.png?raw=true
 
 ## Features
 
