@@ -17,6 +17,7 @@ if (! defined('ABSPATH')) {
 require_once plugin_dir_path(__FILE__) . 'lib/Core/Article.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Core/Blog.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Utils/Date.php';
+require_once plugin_dir_path(__FILE__) . 'lib/Utils/Text.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Partner/Icaro.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Partner/GoogleNews.php';
 
