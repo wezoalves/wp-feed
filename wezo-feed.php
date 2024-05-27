@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Amazing Feed
-Description: Seamlessly integrate your WordPress content with the ICARO platform. This plugin creates a REST API endpoint to list the latest articles in a format compatible with ICARO specifications, ensuring efficient and quick integration.
+Description: Seamlessly integrate your WordPress content with multiple platforms, including Google News, ICARO (Tim News), and Portal R7. This plugin creates REST API endpoints to list the latest articles in formats compatible with each platform's specifications, ensuring efficient and quick integration.
 Version: 1.0
 Author: Weslley Alves
 Author URI: https://www.wezo.com.br
