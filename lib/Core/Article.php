@@ -37,7 +37,7 @@ class Article
      *
      * @return array An array of articles with their details.
      */
-    public function getLasts($size = 30, array $type = ['post'], array $categorySlug = []): array
+    public function getLasts($size = 30, array $type = ['post'], array $categorySlug = [], array $tagSlug = []) : array
     {
         $args = array(
             'post_type' => $type,
@@ -49,7 +49,7 @@ class Article
             )
         );
 
-        if ($categorySlug && !empty($categorySlug)) {
+        if ($categorySlug && ! empty($categorySlug)) {
             $category_ids = [];
             foreach ($categorySlug as $slug) {
                 $category = get_term_by('slug', $slug, 'category');
@@ -58,6 +58,17 @@ class Article
                 }
             }
             $args['category__in'] = $category_ids;
+        }
+
+        if ($tagSlug && ! empty($tagSlug)) {
+            $tag_ids = [];
+            foreach ($tagSlug as $slug) {
+                $tag = get_term_by('slug', $slug, 'post_tag');
+                if ($tag) {
+                    $tag_ids[] = $tag->term_id;
+                }
+            }
+            $args['tag__in'] = $tag_ids;
         }
 
         $query = new \WP_Query($args);
@@ -69,7 +80,7 @@ class Article
             while ($query->have_posts()) {
                 $query->the_post();
 
-                if (!get_the_ID()) {
+                if (! get_the_ID()) {
                     continue;
                 }
 
@@ -149,16 +160,16 @@ class Article
      *
      * @return array An array of related articles with their details.
      */
-    public function getRelated($size = 5, $postId = null, $type = ['post']): array
+    public function getRelated($size = 5, $postId = null, $type = ['post']) : array
     {
-        if (!$postId) {
+        if (! $postId) {
             return [];
         }
 
         $categories = get_the_category($postId);
         $currentSlug = null;
 
-        if (!empty($categories)) {
+        if (! empty($categories)) {
             $currentSlug = $categories[0]->slug;
         }
 

@@ -67,11 +67,20 @@ class GoogleNews
             $categoriesSlug = [$request->get_param('category')];
         }
 
+        // Set the tags of posts to retrieve
+        $tagsSlug = [];
+        if ($request->get_param('subject') && is_array($request->get_param('subject'))) {
+            $tagsSlug = $request->get_param('subject');
+        }
+        if ($request->get_param('subject') && ! is_array($request->get_param('subject'))) {
+            $tagsSlug = [$request->get_param('subject')];
+        }
+
         // Get site information
         $site = (new Blog())->getInfo($request, true);
 
         // Generate the RSS feed
-        $xml = $this->getRss($site, $limit, $categoriesSlug);
+        $xml = $this->getRss($site, $limit, $categoriesSlug, $tagsSlug);
 
         $response = new \WP_REST_Response();
         $response->set_data($xml);
@@ -87,10 +96,12 @@ class GoogleNews
      * @param object|null $site Blog information.
      * @param int $limit Number of articles to retrieve.
      * @param array $categoriesSlug Categories of posts to retrieve.
+     * @param array $tagsSlug Tags of posts to retrieve.
      * @return string The generated RSS feed as a string.
      */
-    private function getRss($site = null, $limit = 0, $categoriesSlug = []) : string
+    private function getRss($site = null, $limit = 0, $categoriesSlug = [], $tagsSlug = []) : string
     {
+
         // Create the XML structure for the RSS feed
         $rss = new \SimpleXMLElement(
             '<?xml version="1.0" encoding="UTF-8" ?>
@@ -101,7 +112,7 @@ class GoogleNews
         );
 
         // Populate the RSS feed with articles
-        $this->getItems($rss, $site, $limit, $categoriesSlug);
+        $this->getItems($rss, $site, $limit, $categoriesSlug, $tagsSlug);
 
         // Format and return the XML feed
         $dom = dom_import_simplexml($rss)->ownerDocument;
@@ -116,12 +127,13 @@ class GoogleNews
      * @param object|null $site Blog information.
      * @param int $limit Number of articles to retrieve.
      * @param array $categoriesSlug Categories of posts to retrieve.
+     * @param array $tagsSlug Tags of posts to retrieve.
      */
-    private function getItems($rss, $site, $limit = 0, $categoriesSlug = [])
+    private function getItems($rss, $site, $limit = 0, $categoriesSlug = [], $tagsSlug = [])
     {
         // Retrieve the articles to include in the feed
-        $articles = (new Article())->getLasts($limit, $this->typeArticles, $categoriesSlug);
-
+        $articles = (new Article())->getLasts($limit, $this->typeArticles, $categoriesSlug, $tagsSlug);
+        
         // Add each article to the XML RSS feed
         foreach ($articles as $post) {
             $post = (object) $post;
