@@ -19,7 +19,7 @@ class Icaro
         $output = $request->get_param('output') ? intval($request->get_param('output')) : 'esc_html';
 
         // limit
-        $limit = $request->get_param('num') ? intval($request->get_param('num')) : $this->sizeArticles;
+        $limit = $request->get_param('limit') ? intval($request->get_param('limit')) : $this->sizeArticles;
         $limit = min($limit, $this->maxArticles);
 
         // type
