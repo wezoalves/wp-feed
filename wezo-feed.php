@@ -19,29 +19,47 @@ if (! defined('ABSPATH')) {
 
 require_once plugin_dir_path(__FILE__) . 'lib/Core/Article.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Core/Blog.php';
+require_once plugin_dir_path(__FILE__) . 'lib/Core/Page.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Utils/Date.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Utils/Text.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Partner/Icaro.php';
+require_once plugin_dir_path(__FILE__) . 'lib/Partner/Sitemap.php';
+require_once plugin_dir_path(__FILE__) . 'lib/Partner/SitemapIndex.php';
 require_once plugin_dir_path(__FILE__) . 'lib/Partner/GoogleNews.php';
 
-function change_rest_url_prefix()
+function plugin_feed_rest_url_prefix()
 {
     return 'apifeed';
 }
-add_filter('rest_url_prefix', 'change_rest_url_prefix');
+add_filter('rest_url_prefix', 'plugin_feed_rest_url_prefix');
 
 function register_endpoints()
 {
     register_rest_route('icaro/v1/feed', '/articles', [
         'methods' => \WP_REST_Server::READABLE,
         'callback' => [new Wezo\Plugin\Feed\Partner\Icaro(), 'callbackArticles'],
-        //'permission_callback' => '__return_true',
     ]);
 
     register_rest_route('googlenews/v1/feed', '/articles', [
         'methods' => \WP_REST_Server::READABLE,
         'callback' => [new \Wezo\Plugin\Feed\Partner\GoogleNews(), 'callbackArticles'],
-        //'permission_callback' => '__return_true',
+    ]);
+
+    // /apifeed/sitemap/index?output=xml&type[]=offer&type[]=video&type[]=post
+    register_rest_route('sitemap', '/index', [
+        'methods' => \WP_REST_Server::READABLE,
+        'callback' => [new \Wezo\Plugin\Feed\Partner\SitemapIndex(), 'callbackSitemap'],
+    ]);
+
+    register_rest_route('sitemap', '/pages', [
+        'methods' => \WP_REST_Server::READABLE,
+        'callback' => [new \Wezo\Plugin\Feed\Partner\Sitemap('page'), 'callbackSitemap'],
+    ]);
+
+    // /apifeed/sitemap/posts?output=xml&limit=1000&type=post&page=1
+    register_rest_route('sitemap', '/posts', [
+        'methods' => \WP_REST_Server::READABLE,
+        'callback' => [new \Wezo\Plugin\Feed\Partner\Sitemap('post'), 'callbackSitemap'],
     ]);
 
     flush_rewrite_rules(true);

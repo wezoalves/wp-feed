@@ -17,12 +17,14 @@ class GoogleNews
 
     public function callbackArticles($request)
     {
-
+        // output
         $output = $request->get_param('output') ? intval($request->get_param('output')) : 'esc_html';
 
+        // limit
         $limit = $request->get_param('num') ? intval($request->get_param('num')) : $this->sizeArticles;
         $limit = min($limit, $this->maxArticles);
 
+        // type
         if ($request->get_param('type') && is_array($request->get_param('type'))) {
             $this->typeArticles = $request->get_param('type');
         }
@@ -30,6 +32,7 @@ class GoogleNews
             $this->typeArticles = [$request->get_param('type')];
         }
 
+        // category
         $categoriesSlug = [];
         if ($request->get_param('category') && is_array($request->get_param('category'))) {
             $categoriesSlug = $request->get_param('category');
@@ -38,6 +41,7 @@ class GoogleNews
             $categoriesSlug = [$request->get_param('category')];
         }
 
+        // tags
         $tagsSlug = [];
         if ($request->get_param('subject') && is_array($request->get_param('subject'))) {
             $tagsSlug = $request->get_param('subject');
@@ -78,17 +82,13 @@ class GoogleNews
 
     private function getItems($rss, $site, $limit = 0, $categoriesSlug = [], $tagsSlug = [])
     {
-
         $articles = (new Article())->getLasts($limit, $this->typeArticles, $categoriesSlug, $tagsSlug);
-
 
         foreach ($articles as $post) {
             $post = (object) $post;
 
-
             $url = $rss->addChild('url');
             $url->addChild('loc', $post->link);
-
 
             $news = $url->addChild('news:news', null, 'http://www.google.com/schemas/sitemap-news/0.9');
             $publication = $news->addChild('news:publication');

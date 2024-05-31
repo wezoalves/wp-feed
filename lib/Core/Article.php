@@ -37,7 +37,7 @@ class Article
      *
      * @return array An array of articles with their details.
      */
-    public function getLasts($size = 30, array $type = ['post'], array $categorySlug = [], array $tagSlug = []) : array
+    public function getLasts($size = 30, array $type = ['post'], array $categorySlug = [], array $tagSlug = [], $page = 1) : array
     {
         $args = array(
             'post_type' => $type,
@@ -46,7 +46,8 @@ class Article
             'orderby' => array(
                 'date' => 'DESC',
                 'title' => 'ASC'
-            )
+            ),
+            'paged' => $page
         );
 
         if ($categorySlug && ! empty($categorySlug)) {

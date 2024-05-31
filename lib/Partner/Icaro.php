@@ -10,21 +10,19 @@ use Wezo\Plugin\Feed\Core\Article;
 class Icaro
 {
     private int $maxArticles = 500;
-
     private int $sizeArticles = 30;
-
     private array $typeArticles = ['post'];
 
     public function callbackArticles($request)
     {
-
+        // output
         $output = $request->get_param('output') ? intval($request->get_param('output')) : 'esc_html';
 
-
+        // limit
         $limit = $request->get_param('num') ? intval($request->get_param('num')) : $this->sizeArticles;
         $limit = min($limit, $this->maxArticles);
 
-
+        // type
         if ($request->get_param('type') && is_array($request->get_param('type'))) {
             $this->typeArticles = $request->get_param('type');
         }
@@ -32,7 +30,7 @@ class Icaro
             $this->typeArticles = [$request->get_param('type')];
         }
 
-
+        // category
         $categoriesSlug = [];
         if ($request->get_param('category') && is_array($request->get_param('category'))) {
             $categoriesSlug = $request->get_param('category');
@@ -41,7 +39,7 @@ class Icaro
             $categoriesSlug = [$request->get_param('category')];
         }
 
-
+        // tags
         $tagsSlug = [];
         if ($request->get_param('subject') && is_array($request->get_param('subject'))) {
             $tagsSlug = $request->get_param('subject');
