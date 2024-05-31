@@ -8,18 +8,20 @@
 **Stable tag:** 1  
 **License:** GPL-3.0-or-later  
 **License URI:** https://www.gnu.org/licenses/gpl-3.0.html#license-text  
-**Tags:** feed, rss, icaro, tim news, record, r7, xml, publishers, wezoalves, wordpress  
+**Tags:** feed, rss, google news, sitemap, wordpress  
 
-Feed is a comprehensive solution for integrating **WordPress** content with multiple platforms, including **Google News**, **ICARO (Tim News)**, and Portal R7 **_(in development)_**. This plugin creates REST API endpoints to list the latest articles from your site, formatted according to each platform's specifications, ensuring smooth and efficient integration.
+Feed is a comprehensive solution for integrating **WordPress** content with multiple platforms, including **Google News**, **ICARO (Tim News)**, **Sitemap Index**, and Portal R7 **_(in development)_**. This plugin creates REST API endpoints to list the latest articles from your site, formatted according to each platform's specifications, ensuring smooth and efficient integration.
 
 
 ## Features
 
 ### Custom Endpoints
-- Creates REST API endpoints in WordPress to provide articles in formats expected by Google News, ICARO (Tim News), and Portal R7.
+- Creates REST API endpoints in WordPress to provide articles in formats expected by Google News, ICARO (Tim News).
 - Example endpoints include:
-  - `/wp-json/googlenews/v1/feed/articles` for **Google News**
-  - `/wp-json/icaro/v1/feed/articles` for **ICARO (Tim News)**
+  - `/apifeed/googlenews/v1/feed/articles?output=xml` for **Google News**
+  - `/apifeed/icaro/v1/feed/articles?output=xml` for **ICARO (Tim News)**
+  - `/apifeed/sitemap/index?output=xml&type[]=TYPE_A&type[]=video&type[]=post` for **Sitemap Index**
+  - `/apifeed/sitemap/posts?output=xml&limit=1000&page=1` for **Sitemap**
 
 ### Parameter Configuration
 - Allows URL parameter configuration to define the number of articles to be listed, making it easy to customize the response according to user needs.
@@ -28,29 +30,30 @@ The **GoogleNews** supports the following parameters for configuring the feed:
 
 | Parameter  | Type           | Description                                                                 |
 | :--------- | :------------- | :-------------------------------------------------------------------------- |
-| `num`      | `int`          | Specifies the number of articles to be listed. Default is 30.               |
+| `output`      | `string`          | Suported: xml.               |
+| `limit`      | `int`          | Specifies the number of articles to be listed. Default is 30.               |
 | `type`     | `string\|array` | Specifies the type of articles to retrieve. Supports single or multiple types. Possible values include 'post', 'video', 'offer', etc. |
 | `category` | `string\|array` | Specifies the category of posts to retrieve. Supports single or multiple categories. Categories should be specified by slug. |
 
 ### Examples
 
 - **Default** limit 30 articles  
-  `/wp-json/googlenews/v1/feed/articles`
+  `/apifeed/googlenews/v1/feed/articles`
 
-- **num** - value between 0 ~ 500  
-  `/wp-json/googlenews/v1/feed/articles?num=[limit articles]` 
+- **limit** - value between 0 ~ 500  
+  `/apifeed/googlenews/v1/feed/articles?output=xml&limit=[limit articles]` 
 
 - **type** - value default post  
-  `/wp-json/googlenews/v1/feed/articles?type=post` 
+  `/apifeed/googlenews/v1/feed/articles?output=xml&type=post` 
 
 - **type** - multiple values  
-  `/wp-json/googlenews/v1/feed/articles?type[]=post&type[]=video` 
+  `/apifeed/googlenews/v1/feed/articles?output=xml&type[]=post&type[]=video` 
 
 - **category** - value eg: news  
-  `/wp-json/googlenews/v1/feed/articles?category=news` 
+  `/apifeed/googlenews/v1/feed/articles?output=xml&category=news` 
 
 - **category** - multiple values eg: news, local, guide...  
-  `/wp-json/googlenews/v1/feed/articles?category[]=news&category[]=local` 
+  `/apifeed/googlenews/v1/feed/articles?output=xml&category[]=news&category[]=local` 
 
 ### Platform-Compatible Formats
 - Formats the article response following the specifications required by each platform, ensuring compatibility and compliance.
@@ -75,7 +78,8 @@ The **GoogleNews** supports the following parameters for configuring the feed:
 ## Usage Example
 1. Install and activate Amazing Feed on your WordPress site.
 2. Access the endpoint relevant to the platform you are integrating with, such as:
-   - `/wp-json/googlenews/v1/feed/articles` for Google News
-   - `/wp-json/icaro/v1/feed/articles` for ICARO (Tim News)
+   - `/apifeed/googlenews/v1/feed/articles?output=xml` for Google News
+   - `/apifeed/icaro/v1/feed/articles?output=xml` for ICARO (Tim News)
+   - `/apifeed/sitemap/index?output=xml` for Sitemap
 
 3. Send the generated feed for evaluation and integration on the respective platform.

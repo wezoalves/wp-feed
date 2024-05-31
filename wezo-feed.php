@@ -51,6 +51,7 @@ function register_endpoints()
         'callback' => [new \Wezo\Plugin\Feed\Partner\SitemapIndex(), 'callbackSitemap'],
     ]);
 
+    // /apifeed/sitemap/pages?output=xml&limit=1000&page=1
     register_rest_route('sitemap', '/pages', [
         'methods' => \WP_REST_Server::READABLE,
         'callback' => [new \Wezo\Plugin\Feed\Partner\Sitemap('page'), 'callbackSitemap'],
