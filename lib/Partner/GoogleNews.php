@@ -94,7 +94,7 @@ class GoogleNews
             $publication = $news->addChild('news:publication');
             $publication->addChild('news:name', $site->title);
             $publication->addChild('news:language', $site->language);
-            $news->addChild('news:publication_date', $post->pubDate);
+            $news->addChild('news:publication_date', $post->formattedPubDate);
             $news->addChild('news:title', $post->title);
             $news->addChild('news:keywords', $post->keywords);
 
