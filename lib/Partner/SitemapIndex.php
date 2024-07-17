@@ -13,13 +13,14 @@ class SitemapIndex
     private array $typePosts = ['post'];
     private array $categoryPosts = [];
     private array $tagPosts = [];
+    private string $pathPrefix = 'apifeed';
 
     public function callbackSitemap($request)
     {
 
         $site = (new Blog())->getInfo($request, true);
 
-        $this->prefixEndpoint = $site->link . '/' . plugin_feed_rest_url_prefix() . '/sitemap/';
+        $this->prefixEndpoint = $site->link . '/' . $this->pathPrefix . '/sitemap/';
 
         // output
         $this->output = $request->get_param('output') ? $request->get_param('output') : 'esc_html';

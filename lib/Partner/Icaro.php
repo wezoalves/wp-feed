@@ -115,7 +115,11 @@ class Icaro
 
             $contentEncodedElement = $article->addChild('content:encoded', null, 'http://purl.org/rss/1.0/modules/content/');
             $contentEncodedDom = dom_import_simplexml($contentEncodedElement);
-            $contentCdata = $contentEncodedDom->ownerDocument->createCDATASection($post->content);
+
+            // remove coments
+            $postContent = preg_replace('/<!--(.*?)-->/', '', $post->content);
+
+            $contentCdata = $contentEncodedDom->ownerDocument->createCDATASection($postContent);
             $contentEncodedDom->appendChild($contentCdata);
 
             $article->addChild('media:thumbnail', $post->thumbnailUrl, 'http://search.yahoo.com/mrss/');
